@@ -1,0 +1,1 @@
+export const mealTimeArray: string[] = ['Breakfast', 'Snack', 'Lunch', 'Dinner'];

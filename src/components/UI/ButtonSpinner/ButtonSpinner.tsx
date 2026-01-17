@@ -3,18 +3,20 @@ import * as React from 'react';
 
 interface Props {
     text: string;
-    icon?: React.ReactNode
+    icon?: React.ReactNode;
     loading: boolean;
+    type: 'button' | 'submit' | 'reset';
 }
 
-const ButtonSpinner: React.FC<Props> = ({text, icon, loading}) => {
+const ButtonSpinner: React.FC<Props> = ({text, icon, loading, type}) => {
     return (
         <Button
+            type={type}
             color="secondary"
             loading={loading}
             variant="outlined"
             loadingPosition="end"
-            startIcon={icon}
+            endIcon={icon}
             disabled={loading}
         >
             {text}
