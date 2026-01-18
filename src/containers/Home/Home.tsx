@@ -17,7 +17,6 @@ const Home = () => {
             setIsLoading(true);
             const response = await axiosAPI.get<IMealAPI>('meals.json');
             const mealsObjects = response.data;
-            console.log(mealsObjects);
 
             if (mealsObjects) {
                 const allMeals = Object.keys(mealsObjects).map(meal => {
@@ -56,7 +55,7 @@ const Home = () => {
             {!isLoading && meals.length > 0 &&
                 <Box>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Typography component='p' variant='h5' color='textSecondary'>Total calories: {total} </Typography>
+                    <Typography component='p' variant='h5' color='textSecondary'>Total calories: <strong>{total}</strong></Typography>
                     <Button type='button' variant='outlined' color='secondary' component={NavLink} to='/meals/new-meal'>Add new meal</Button>
                   </Box>
                   <MealCard meals={meals} deleteMeal={onDeleteMeal} />

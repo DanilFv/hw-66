@@ -17,7 +17,7 @@ interface Props {
     mealId?: string;
 }
 
-const MealForm: React.FC<Props> = ({isEdit, mealId, initialValues = {
+const MealForm: React.FC<Props> = ({isEdit = false, mealId, initialValues = {
     mealTime: '',
     mealDescription: '',
     calories: 0,
@@ -33,17 +33,18 @@ const MealForm: React.FC<Props> = ({isEdit, mealId, initialValues = {
         try {
             setIsLoading(true);
             if (isEdit && mealId) {
-                console.log(mealId);
+                await axiosAPI.put(`meals/${mealId}.json`, data)
             } else {
                 await axiosAPI.post('meals.json', data);
                 navigate('/');
-                toast.success('Прием пищи успешно добавлен!');
                 reset();
             }
 
         } finally {
             setIsLoading(false);
         }
+
+         toast.success(`Прием пищи успешно ${isEdit ? 'изменен' : 'добавлен'}!`);
     };
 
 
