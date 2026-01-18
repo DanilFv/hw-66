@@ -30,7 +30,6 @@ const MealForm: React.FC<Props> = ({isEdit, mealId, initialValues = {
     });
 
     const onSubmit =  async (data: IMealForm) => {
-
         try {
             setIsLoading(true);
             if (isEdit && mealId) {
@@ -45,15 +44,13 @@ const MealForm: React.FC<Props> = ({isEdit, mealId, initialValues = {
         } finally {
             setIsLoading(false);
         }
-
-
     };
 
 
     return (
         <Box sx={{ mt: 4 }}>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <Typography variant='h5' component='h5' color='textSecondary' sx={{ textAlign: 'center' }}>
+                <Typography variant='h4' component='h5' color='textSecondary' sx={{ textAlign: 'center', fontWeight: 'medium' }}>
                     {isEdit ? 'Edit meal' : 'Add meal'}
                 </Typography>
 
