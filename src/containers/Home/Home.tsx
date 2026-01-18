@@ -1,15 +1,16 @@
 import {useCallback, useEffect, useState} from 'react';
-import {Box, Button, Typography} from '@mui/material';
-import {NavLink} from 'react-router-dom';
+import {Typography} from '@mui/material';
 import type {IMeal, IMealAPI} from '../../types';
 import axiosAPI from '../../components/axiosAPI.ts';
 import MealCard from '../../components/MealCard/MealCard.tsx';
 import Spinner from '../../components/UI/Spinner/Spinner.tsx';
 import {toast} from 'react-toastify';
+import MealsHeader from '../../components/MealsHeader/MealsHeader.tsx';
 
 
 const Home = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [buttonLoading, setButtonLoading] = useState<boolean>(false);
     const [meals, setMeals] = useState<IMeal[]>([]);
 
     const fetchMeals = useCallback(async () => {
@@ -37,9 +38,15 @@ const Home = () => {
     },[fetchMeals]);
 
     const onDeleteMeal = async (id: string) => {
-      await axiosAPI.delete(`meals/${id}.json`);
-      setMeals(prevState => prevState.filter(meal => meal.id !== id));
-      toast.success('Прием пищи успешно удален!');
+        try {
+            setButtonLoading(true);
+            await axiosAPI.delete(`meals/${id}.json`);
+            setMeals(prevState => prevState.filter(meal => meal.id !== id));
+            toast.success('Прием пищи успешно удален!');
+
+        } finally {
+            setButtonLoading(false);
+        }
     };
 
     const total = meals.reduce((acc, item) => {
@@ -50,17 +57,10 @@ const Home = () => {
 
     return (
         <>
+            <MealsHeader total={meals.length > 0 ? total : undefined} />
             {isLoading && <Spinner />}
-            {!isLoading && meals.length === 0 && <Typography variant='h4' component='p'>No meals found.</Typography>}
-            {!isLoading && meals.length > 0 &&
-                <Box>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Typography component='p' variant='h5' color='textSecondary'>Total calories: <strong>{total}</strong></Typography>
-                    <Button type='button' variant='outlined' color='secondary' component={NavLink} to='/meals/new-meal'>Add new meal</Button>
-                  </Box>
-                  <MealCard meals={meals} deleteMeal={onDeleteMeal} />
-                </Box>
-            }
+            {!isLoading && meals.length === 0 && <Typography variant='h4' component='p' sx={{ fontWeight: 'medium',}}>No meals found.</Typography>}
+            {!isLoading && meals.length > 0 && <MealCard meals={meals} deleteMeal={onDeleteMeal} isLoading={buttonLoading} />}
         </>
     );
 };

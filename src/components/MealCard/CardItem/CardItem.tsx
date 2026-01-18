@@ -8,9 +8,10 @@ import {NavLink} from 'react-router-dom';
 interface Props {
     meal: IMeal;
     deleteMeal: (id: string) => void;
+    isLoading?: boolean;
 }
 
-const CardItem: React.FC<Props> = ({meal, deleteMeal}) => {
+const CardItem: React.FC<Props> = ({meal, deleteMeal, isLoading = false}) => {
     return (
         <>
             <Box>
@@ -26,7 +27,7 @@ const CardItem: React.FC<Props> = ({meal, deleteMeal}) => {
                 <Typography component='p' variant='body1' sx={{ mx: 10, fontWeight: 'bold' }}>{meal.calories} kcal</Typography>
                 <Box display={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Button type='button' variant='text' component={NavLink} to={`/meals/${meal.id}/edit-meal`} color='secondary' sx={{ mb: 1 }}><EditNoteIcon/></Button>
-                    <Button type='button' variant='text' color='error' onClick={() => deleteMeal(meal.id)} ><DeleteForeverIcon/></Button>
+                    <Button type='button' loading={isLoading} loadingPosition='center' disabled={isLoading} variant='text' color='error' onClick={() => deleteMeal(meal.id)} ><DeleteForeverIcon/></Button>
                 </Box>
             </Box>
         </>
